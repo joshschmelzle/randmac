@@ -6,7 +6,7 @@
 __title__ = "randmac"
 __description__ = "a random 12-digit mac address generator"
 __url__ = "https://github.com/joshschmelzle/randmac"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __author__ = "Josh Schmelzle"
 __author_email__ = "joshjoshdev@gmail.com"
 __license__ = "MIT"
