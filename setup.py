@@ -7,8 +7,8 @@ from setuptools import find_packages, setup
 here = os.path.abspath(os.path.dirname(__file__))
 
 # 'setup.py publish' shortcut.
-if sys.argv[-1] == 'build':
-    os.system('python setup.py sdist bdist_wheel')
+if sys.argv[-1] == "build":
+    os.system("python setup.py sdist bdist_wheel")
     sys.exit()
 
 # load the package's __version__.py module as a dictionary
@@ -31,12 +31,13 @@ setup(
     packages=find_packages(exclude=("tests",)),
     description=about["__description__"],
     long_description=readme,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author=about["__author__"],
     author_email=about["__author_email__"],
     python_requires=">3.2,",
     install_requires=requires,
     url=about["__url__"],
+    entry_points={"console_scripts": ["randmac=randmac.__main__:main"]},
     keywords=["randmac", "random mac", "random mac address"],
     license=about["__license__"],
     classifiers=[
