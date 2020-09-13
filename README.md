@@ -28,31 +28,35 @@ where `M` stands for the manufacturer or vendor, and `S` stands for the NIC spec
 
 # usage
 
-requires a mac address as input. it is used to determine what the output format should be.
+you can `from randmac import RandMac` and use it like `RandMac()`.
 
-you can `from randmac import RandMac` and use it like `RandMac("00:00:00:00:00:00")`.
+if you wish to change the mac address format. provide a sample mac so `randmac` knows what the output format should be.
 
-from a terminal (if the randmac.py is in your path and executable) you can use `$ python3 randmac.py 00:00:00:00:00:00` to get a generate a new NIC portion, or `$ python3 randmac.py 00:00:00:00:00:00 -f` to generate a new 12-digit LAA MAC.
+you can `from randmac import RandMac` and use it like `RandMac("0000.0000.0000")`.
+
+from a terminal (if the the console scripts entry point `randmac` is in your path and executable) you can use `randmac` to get a generate a new 12-digit LAA address, or `randmac 00:00:00:00:00:00 -p` to generate a MAC with the same OUI, but a different NIC portion.
 
 # example usage
 
 ```
 >>> from randmac import RandMac
->>> RandMac("00:00:00:00:00:00")
-'00:00:00:00:fd:9e'
+>>> RandMac()
+'a6:9b:6b:8e:b3:42'
 >>> RandMac("00:00:00:00:00:00", True)
-'ba:ac:5f:09:fc:bb'
->>> RandMac("0000.0000.0000", True)
-'fe84.857f.900f'
+'00:00:00:3f:8a:06'
+>>> RandMac("0000:0000:0000", True)
+'0000007ce662'
+>>> RandMac("0000:0000:0000")
+'06eb4584d1e3'
 ```
 
 or
 
 ```
-$ python3 randmac.py 00:00:00:00:00:00
-00:00:00:fc:e1:5b
-$ python3 randmac.py 00:00:00:00:00:00 -f
-2a:81:b0:e7:1d:08
+> randmac
+fa:bf:7c:5d:65:3e
+> randmac 00-00-00-00-00-00 -p
+00-00-00-dd-5f-16
 ``` 
 
 # license
