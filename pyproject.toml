@@ -1,10 +1,11 @@
 [build-system]
-requires = ["setuptools==61.0.0", "wheel"]
+requires = ["setuptools==67.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "randmac"
-description = ""
+version = "0.2.0"
+description = "randmac is a utility that generates 12-digit mac addresses"
 readme = "README.md"
 authors = [{ name = "Josh Schmelzle", email = "josh@joshschmelzle.com"}]
 license = { file = "LICENSE" }
@@ -12,6 +13,7 @@ classifiers = [
     "Natural Language :: English",
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3.2",
+    "License :: OSI Approved :: BSD License",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
     "Topic :: Utilities",
@@ -19,7 +21,7 @@ classifiers = [
 keywords = ["randmac", "random mac", "random mac address"]
 
 [project.scripts]
-randmac = "randmac=randmac.__main__:main"
+randmac = "randmac.__main__:main"
 
     [project.optional-dependencies]
     build = ["build", "twine"]
@@ -36,6 +38,7 @@ push = false
 [tool.bumpver.file_patterns]
 "pyproject.toml" = [
     'current_version = "{version}"',
+    'version = "{version}"',
 ]
 "randmac/__version__.py" = [
     '__version__ = "{version}"'
