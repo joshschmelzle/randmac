@@ -23,9 +23,9 @@ keywords = ["randmac", "random mac", "random mac address"]
 [project.scripts]
 randmac = "randmac.__main__:main"
 
-    [project.optional-dependencies]
-    build = ["build", "twine"]
-    dev = ["black", "bumpver", "isort", "mypy", "pytest"]
+[project.optional-dependencies]
+build = ["build", "twine"]
+dev = ["black", "bumpver", "isort", "mypy", "pytest"]
 
 [tool.bumpver]
 current_version = "0.2.0"
