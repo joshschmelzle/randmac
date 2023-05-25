@@ -18,9 +18,9 @@ def _setup_parser(_about: dict) -> argparse:
     parser = argparse.ArgumentParser(
         description=textwrap.dedent(
             """
-            Generates MAC addresses. By default will generate a 12-digit
-            MAC address following the Locally Administrated Address format.
-            Only supports 12-digit MAC addresses.
+            Generates MAC addresses. By default randmac will generate a 12-digit
+            MAC address following the Locally Administrated Address (LAA) format.
+            randmac only supports 12-digit (48-bit) MAC addresses.
             """
         ),
         epilog="Made with Python by {}".format(_about["__author__"]),
@@ -31,15 +31,16 @@ def _setup_parser(_about: dict) -> argparse:
         "mac", nargs="?", default="empty", help="mac address required for output format"
     )
     parser.add_argument(
-        "-V",
-        "--version",
-        action="version",
-        version="%(prog)s {}".format(_about["__version__"]),
-    )
-    parser.add_argument(
         "-p",
         "--partial",
         action="store_true",
         help="randomizes the NIC portion of a MAC address",
+    )
+    parser.add_argument(
+        "-v",
+        "-V",
+        "--version",
+        action="version",
+        version="%(prog)s {}".format(_about["__version__"]),
     )
     return parser

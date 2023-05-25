@@ -84,18 +84,18 @@ class RandMac(object):  # pylint: disable=too-few-public-methods
 
     def __str__(self):
         return str(self.mac)
-    
+
     def __getitem__(self, item):
         return str(self.mac)[item]
-    
+
     def __len__(self):
         return len(str(self.mac))
-    
+
     @staticmethod
     def _trim_separator(mac: str) -> str:
         """removes separator from MAC address"""
-        return mac.replace(":","").replace("-","").replace(".","")
-    
+        return mac.replace(":", "").replace("-", "").replace(".", "")
+
     @staticmethod
     def _set_lettercase(string: str) -> str:
         """determines lettercase for MAC address"""

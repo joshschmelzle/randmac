@@ -6,15 +6,14 @@
 #
 
 import os
-import platform
 import sys
 
-from .randmac import RandMac
 from .helpers import _setup_parser
+from .randmac import RandMac
 
 
 def main():
-    """ Set up args and retrieve a random mac address """
+    """Set up args and retrieve a random mac address"""
     _here = os.path.abspath(os.path.dirname(__file__))
 
     # load the package's __version__.py module as a dictionary
@@ -38,7 +37,7 @@ def main():
 
 
 def init() -> None:
-    """ Handle main init """
+    """Handle main init"""
     if __name__ == "__main__":
         sys.exit(main())
 
