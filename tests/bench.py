@@ -1,8 +1,15 @@
+# /usr/bin/env python3
+# -*- coding: utf-8 -*-
+#
+#  _ _  _  _| _ _  _  _
+# | (_|| |(_|| | |(_|(_
+#
+
 import time
 import sys
 
 sys.path.insert(0, "../randmac/")
-import randmac
+from randmac import RandMac
 
 
 def bench():
@@ -36,10 +43,10 @@ def test():
         "00000000000f",
     ]:
         # print("input {}".format(mac))
-        mac = randmac.nic_portion(mac)
-        # print("output nic {}".format(mac))
-        mac = randmac.twelve_digit_mac(mac)
-        # print("output mac {}".format(mac))
+        foo = RandMac(mac, generate_partial=True)
+        # print("output nic {}".format(foo))
+        foo = RandMac(mac)
+        # print("output mac {}".format(foo))
         # print("")
 
 

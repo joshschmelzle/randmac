@@ -1,10 +1,14 @@
 # /usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+#  _ _  _  _| _ _  _  _
+# | (_|| |(_|| | |(_|(_
+#
 
 """
-Randomizes the 6 digit NIC portion of the MAC address required for input.
+Generates a 12-digit LAA MAC address
 
-Optional argument will generate a 12-digit LAA.
+Optional argument will generate 6 digit NIC portion of the MAC address.
 
 Supported MAC address formats:
     MM:MM:MM:SS:SS:SS
@@ -14,8 +18,6 @@ Supported MAC address formats:
 """
 
 import random
-import sys
-import os
 from enum import Enum
 
 
@@ -56,6 +58,7 @@ class RandMac(object):  # pylint: disable=too-few-public-methods
     def __init__(self, mac=None, generate_partial=None) -> None:
         if mac is None:
             mac = "11:11:11:11:11:11"
+        mac = mac.lower()
         trimmed = self._trim_separator(mac)
         _chars = []
         for _char in trimmed:
@@ -77,16 +80,22 @@ class RandMac(object):  # pylint: disable=too-few-public-methods
         )
 
     def __repr__(self):
-        return repr(self.mac)
+        return repr(str(self.mac))
 
     def __str__(self):
         return str(self.mac)
-
+    
+    def __getitem__(self, item):
+        return str(self.mac)[item]
+    
+    def __len__(self):
+        return len(str(self.mac))
+    
     @staticmethod
     def _trim_separator(mac: str) -> str:
         """removes separator from MAC address"""
-        return mac.translate(str.maketrans("", "", ":-."))
-
+        return mac.replace(":","").replace("-","").replace(".","")
+    
     @staticmethod
     def _set_lettercase(string: str) -> str:
         """determines lettercase for MAC address"""

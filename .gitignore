@@ -16,3 +16,4 @@ TODO.md
 dist
 .pytest_cache/
 /.mypy_cache/
+venv/
