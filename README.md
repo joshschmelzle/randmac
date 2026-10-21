@@ -15,7 +15,7 @@ To install with pip:
 
 # Requirements
 
-Python 3.2 or greater is required.
+Python 3.13 or greater is required.
 
 # Supported MAC address formats
 

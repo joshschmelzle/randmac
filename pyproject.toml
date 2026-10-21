@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools==67.0.0", "wheel"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,18 +7,29 @@ name = "randmac"
 version = "0.2.0"
 description = "randmac is a utility that generates 12-digit mac addresses"
 readme = "README.md"
-authors = [{ name = "Josh Schmelzle", email = "josh@joshschmelzle.com"}]
-license = { file = "LICENSE" }
+requires-python = ">=3.13"
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+authors = [{ name = "Josh Schmelzle", email = "josh@joshschmelzle.com" }]
+keywords = ["randmac", "random mac", "random mac address"]
 classifiers = [
-    "Natural Language :: English",
     "Development Status :: 3 - Alpha",
-    "Programming Language :: Python :: 3.2",
-    "License :: OSI Approved :: BSD License",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Utilities",
 ]
-keywords = ["randmac", "random mac", "random mac address"]
+
+[project.urls]
+Homepage = "https://github.com/joshschmelzle/randmac"
+Repository = "https://github.com/joshschmelzle/randmac"
+Changelog = "https://github.com/joshschmelzle/randmac/blob/main/HISTORY.md"
+Issues = "https://github.com/joshschmelzle/randmac/issues"
 
 [project.scripts]
 randmac = "randmac.__main__:main"
@@ -26,6 +37,21 @@ randmac = "randmac.__main__:main"
 [project.optional-dependencies]
 build = ["build", "twine"]
 dev = ["black", "bumpver", "isort", "mypy", "pytest"]
+
+[tool.setuptools.packages.find]
+include = ["randmac*"]
+
+[tool.black]
+target-version = ["py313"]
+
+[tool.isort]
+py_version = "313"
+
+[tool.mypy]
+python_version = "3.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.bumpver]
 current_version = "0.2.0"
@@ -41,5 +67,5 @@ push = false
     'version = "{version}"',
 ]
 "randmac/__version__.py" = [
-    '__version__ = "{version}"'
+    '__version__ = "{version}"',
 ]
