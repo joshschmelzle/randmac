@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+.pypirc
 .coverage
 MANIFEST
 coverage.xml
