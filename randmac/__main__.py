@@ -5,35 +5,32 @@
 # | (_|| |(_|| | |(_|(_
 #
 
-import os
 import sys
 
+from . import __version__ as about
 from .helpers import _setup_parser
 from .randmac import RandMac
 
 
-def main():
-    """Set up args and retrieve a random mac address"""
-    _here = os.path.abspath(os.path.dirname(__file__))
-
-    # load the package's __version__.py module as a dictionary
-    _about = {}
-
-    with open(os.path.join(_here, "__version__.py")) as f:
-        exec(f.read(), _about)
-
-    arg_parser = _setup_parser(_about)
-    args = arg_parser.parse_args()
-    if args.mac == "empty":
-        random_mac = RandMac("00:00:00:00:00:00", False)
-        print(random_mac.mac)
-    else:
-        format_mac = args.mac
+def main(argv: list[str] | None = None) -> int:
+    """Set up args and print a random mac address"""
+    arg_parser = _setup_parser(
+        {"__author__": about.__author__, "__version__": about.__version__}
+    )
+    args = arg_parser.parse_args(argv)
+    if args.mac is None:
         if args.partial:
-            random_mac = RandMac(format_mac, True)
-        else:
-            random_mac = RandMac(format_mac, False)
-        print(random_mac.mac)
+            arg_parser.error(
+                "--partial needs a MAC address to keep the vendor (OUI) portion from"
+            )
+        print(RandMac("00:00:00:00:00:00", False).mac)
+        return 0
+    try:
+        random_mac = RandMac(args.mac, args.partial)
+    except ValueError as error:
+        arg_parser.error(str(error))
+    print(random_mac.mac)
+    return 0
 
 
 def init() -> None:

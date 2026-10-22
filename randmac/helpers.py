@@ -9,26 +9,28 @@ import argparse
 import textwrap
 
 
-def _setup_parser(_about: dict) -> argparse:
+def _setup_parser(_about: dict[str, str]) -> argparse.ArgumentParser:
     """Setup parser for arguments passed in from the CLI.
 
     Returns:
       argparse object.
     """
     parser = argparse.ArgumentParser(
-        description=textwrap.dedent(
-            """
+        prog="randmac",
+        description=textwrap.dedent("""
             Generates MAC addresses. By default randmac will generate a 12-digit
             MAC address following the Locally Administrated Address (LAA) format.
             randmac only supports 12-digit (48-bit) MAC addresses.
-            """
-        ),
+            """),
         epilog="Made with Python by {}".format(_about["__author__"]),
         fromfile_prefix_chars="@",
     )
 
     parser.add_argument(
-        "mac", nargs="?", default="empty", help="mac address required for output format"
+        "mac",
+        nargs="?",
+        default=None,
+        help="sample MAC address that sets the output format (and the vendor portion with -p)",
     )
     parser.add_argument(
         "-p",

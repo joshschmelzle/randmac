@@ -13,37 +13,22 @@ Optional argument will generate 6 digit NIC portion of the MAC address.
 Supported MAC address formats:
     MM:MM:MM:SS:SS:SS
     MM-MM-MM-SS-SS-SS
+    MM.MM.MM.SS.SS.SS
     MMMM.MMSS.SSSS
     MMMMMMSSSSSS
 """
 
-import random
+import secrets
 from enum import Enum
 
 
 class RandMac(object):  # pylint: disable=too-few-public-methods
+    """A random MAC address in the same format as a sample MAC address"""
+
+    # second hex digit of a locally administered, unicast address
     _LOCAL = ["2", "6", "a", "e"]
 
-    _HEX = [
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-    ]
-
-    _LOWERCASE = True
+    _HEX = "0123456789abcdef"
 
     class Format(Enum):
         """type of MAC address formats"""
@@ -55,15 +40,15 @@ class RandMac(object):  # pylint: disable=too-few-public-methods
         NONE = 5
         UNKNOWN = 6
 
-    def __init__(self, mac=None, generate_partial=None) -> None:
+    def __init__(
+        self, mac: str | None = None, generate_partial: bool | None = None
+    ) -> None:
         if mac is None:
             mac = "11:11:11:11:11:11"
+        uppercase = self._is_uppercase(mac)
         mac = mac.lower()
         trimmed = self._trim_separator(mac)
-        _chars = []
-        for _char in trimmed:
-            if _char not in self._HEX:
-                _chars.append(_char)
+        _chars = [_char for _char in trimmed if _char not in self._HEX]
         if _chars:
             raise ValueError("Invalid characters in MAC format {}".format(_chars))
         if len(trimmed) != 12:
@@ -75,20 +60,20 @@ class RandMac(object):  # pylint: disable=too-few-public-methods
             not_formatted = self._build_random_nic(trimmed)
         else:
             not_formatted = self._build_random_twelve_digit()
-        self.mac = self._build_mac_with_separator(
-            self._set_lettercase(not_formatted), _format
-        )
+        if uppercase:
+            not_formatted = not_formatted.upper()
+        self.mac = self._build_mac_with_separator(not_formatted, _format)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return repr(str(self.mac))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.mac)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int | slice) -> str:
         return str(self.mac)[item]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(str(self.mac))
 
     @staticmethod
@@ -97,57 +82,29 @@ class RandMac(object):  # pylint: disable=too-few-public-methods
         return mac.replace(":", "").replace("-", "").replace(".", "")
 
     @staticmethod
-    def _set_lettercase(string: str) -> str:
-        """determines lettercase for MAC address"""
-        return (
-            string.lower() if bool(any(c.islower() for c in string)) else string.upper()
-        )
+    def _is_uppercase(mac: str) -> bool:
+        """True when the sample MAC uses uppercase hex letters and no lowercase ones"""
+        return any(c.isupper() for c in mac) and not any(c.islower() for c in mac)
 
     @staticmethod
-    def _ins(source: str, insert: str, position: int) -> str:
-        """inserts value at a certain position in the source"""
-        return source[:position] + insert + source[position:]
+    def _split(mac: str, size: int) -> list[str]:
+        return [mac[i : i + size] for i in range(0, len(mac), size)]
 
     def _build_mac_with_separator(self, mac: str, _format: Format) -> str:
         """builds the type of separator used"""
         if _format == self.Format.HYPHEN:
-            return self._ins(
-                self._ins(
-                    self._ins(self._ins(self._ins(mac, "-", 2), "-", 5), "-", 8),
-                    "-",
-                    11,
-                ),
-                "-",
-                14,
-            )
+            return "-".join(self._split(mac, 2))
         if _format == self.Format.COLON:
-            return self._ins(
-                self._ins(
-                    self._ins(self._ins(self._ins(mac, ":", 2), ":", 5), ":", 8),
-                    ":",
-                    11,
-                ),
-                ":",
-                14,
-            )
+            return ":".join(self._split(mac, 2))
         if _format == self.Format.PERIOD:
-            return self._ins(
-                self._ins(
-                    self._ins(self._ins(self._ins(mac, ".", 2), ".", 5), ".", 8),
-                    ".",
-                    11,
-                ),
-                ".",
-                14,
-            )
+            return ".".join(self._split(mac, 2))
         if _format == self.Format.CISCO:
-            return self._ins(self._ins(mac, ".", 4), ".", 9)
+            return ".".join(self._split(mac, 4))
         if _format == self.Format.NONE:
             return mac
-        if _format == self.Format.UNKNOWN:
-            return "mac format unknown"
+        return "mac format unknown"
 
-    def _get_mac_format(self, mac: str) -> str:
+    def _get_mac_format(self, mac: str) -> Format:
         """set the mac format style"""
         if mac.count("-") == 5 and "." not in mac and ":" not in mac:
             return self.Format.HYPHEN
@@ -161,25 +118,15 @@ class RandMac(object):  # pylint: disable=too-few-public-methods
             return self.Format.NONE
         if "." not in mac and ":" not in mac and "-" not in mac:
             return self.Format.UNKNOWN
-        else:
-            return self.Format.NONE
+        return self.Format.NONE
 
     def _build_random_nic(self, mac: str) -> str:
         """randomize 6-digit NIC portion of a mac"""
-        vendor = ""
-        random_nic = ""
-        for c in mac[:6]:
-            vendor += c
-        for c in mac[-6:]:
-            random_nic += random.choice(self._HEX)
-        return vendor + random_nic
+        return mac[:6] + "".join(secrets.choice(self._HEX) for _ in range(6))
 
     def _build_random_twelve_digit(self) -> str:
         """randomize 12-digit mac"""
-        mac = ""
-        for number in range(0, 12):
-            if number == 1:
-                mac += random.choice(self._LOCAL)
-            else:
-                mac += random.choice(self._HEX)
-        return mac
+        return "".join(
+            secrets.choice(self._LOCAL) if number == 1 else secrets.choice(self._HEX)
+            for number in range(12)
+        )
